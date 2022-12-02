@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33027.164
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{A8BFB772-0801-4218-883D-664765CEE340}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VikaProject", "VikaProject\VikaProject.csproj", "{6362D37D-8CF7-4705-A750-6C84102FF7A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8BFB772-0801-4218-883D-664765CEE340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8BFB772-0801-4218-883D-664765CEE340}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8BFB772-0801-4218-883D-664765CEE340}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8BFB772-0801-4218-883D-664765CEE340}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6362D37D-8CF7-4705-A750-6C84102FF7A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6362D37D-8CF7-4705-A750-6C84102FF7A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6362D37D-8CF7-4705-A750-6C84102FF7A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6362D37D-8CF7-4705-A750-6C84102FF7A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {50FA96C6-09AE-4075-AB50-C022FD3B96DF}
+	EndGlobalSection
+EndGlobal
