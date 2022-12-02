@@ -15,8 +15,9 @@ namespace VikaProject
         public Color currentcolor { get; set; }
 
 
-        public void Add()
+        public override string ToString()
         {
+            return event_time + " " + deadline + " " + description + " " + currentcolor;
         }
     }
 }

@@ -18,6 +18,8 @@ namespace VikaProject
         private DateTime selectedDateTime;
         private Label prevselectedLabel;
         private Color selected_color;
+        WorkingWithDB Db;
+
         public Form1()
         {
             InitializeComponent();
@@ -26,22 +28,21 @@ namespace VikaProject
             current_month.Text = $"{now.ToString("MMMM")}";
             
             UpdateCaledar();
-            
+            Db = new();
 
         }
         private void button1_Click(object sender, EventArgs e)
         {
             now = now.AddMonths(1);
-            current_month.Text = $"{now.ToString("MMMM")}";
+            current_month.Text = now.ToString("MMMM");
             current_year.Text = now.Year.ToString();
             UpdateCaledar();
 
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             now = now.AddMonths(-1);
-            current_month.Text = $"{now.ToString("MMMM")}";
+            current_month.Text = now.ToString("MMMM");
             current_year.Text = now.Year.ToString();
             UpdateCaledar();
 
@@ -122,6 +123,19 @@ namespace VikaProject
                 selected_color = colorpicker.Color;
                 button3.BackColor = selected_color;
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            CalendarEvent eEvent = new CalendarEvent()
+            {
+                event_time = DateTime.Parse(CurrentDate.Text),
+                deadline = dateTimePicker1.Value.Date,
+                description = DescriptionBox.Text,
+                currentcolor = selected_color,
+            };
+            Db.Add(eEvent);
+
         }
     }
 }
