@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.Drawing;
+using System.Security.Cryptography;
 
 
 namespace VikaProject
 {
-    class WorkingWithDB
+    public class WorkingWithDB
     {
         private SQLiteConnection db;
         SQLiteDataReader reader;
@@ -22,10 +25,10 @@ namespace VikaProject
         }
         public void Add(CalendarEvent calendarEvent)
         {
-            command = new SQLiteCommand("insert into Color(A,B,G,color_id) values (@A,@B,@G,@color_id)", db);
-            command.Parameters.AddWithValue("@A", calendarEvent.currentcolor.A);
-            command.Parameters.AddWithValue("@B", calendarEvent.currentcolor.B);
+            command = new SQLiteCommand("insert into Color(R,G,B,color_id) values (@R,@G,@B,@color_id)", db);
+            command.Parameters.AddWithValue("@R", calendarEvent.currentcolor.R);
             command.Parameters.AddWithValue("@G", calendarEvent.currentcolor.G);
+            command.Parameters.AddWithValue("@B", calendarEvent.currentcolor.B);
             command.Parameters.AddWithValue("@color_id", null);
 
             command.ExecuteNonQuery();
@@ -44,9 +47,9 @@ namespace VikaProject
         int GetCurrentColor_id(CalendarEvent calendarEvent)
         {
             command = new($"SELECT color_id from Color " +
-                                                   $"where A={calendarEvent.currentcolor.A}" +
-                                                   $" and B={calendarEvent.currentcolor.B}" +
-                                                   $" and G={calendarEvent.currentcolor.G}", db);
+                                                   $"where R={calendarEvent.currentcolor.R}" +
+                                                   $" and G={calendarEvent.currentcolor.G}" +
+                                                   $" and B={calendarEvent.currentcolor.B}", db);
 
             reader = command.ExecuteReader();
             foreach (DbDataRecord el in reader)
@@ -55,6 +58,94 @@ namespace VikaProject
             }
 
             return 0;
+        }
+
+        public List<CalendarEvent> GetAllEvents()
+        {
+            command = new($"SELECT Event_id, event_time,deadline,description, R,G,B from CalendarEvent c " +
+                          $"inner join Color clr on c.color_id = clr.color_id", db);
+            List<CalendarEvent> temp = new();
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord el in reader)
+            {
+               temp.Add(new CalendarEvent()
+               {
+                   Event_id = int.Parse(el["Event_id"].ToString()),
+                   currentcolor =Color.FromArgb(int.Parse(el["R"].ToString()),int.Parse(el["G"].ToString()), int.Parse(el["B"].ToString())),
+                   deadline = DateTime.Parse(el["deadline"].ToString()),
+                   description = el["description"].ToString(),
+                   event_time = DateTime.Parse(el["event_time"].ToString()),
+               });
+            }
+
+            return temp;
+        }
+
+        public void ClearDB()
+        {
+            command = new SQLiteCommand("delete from CalendarEvent", db);
+            command.ExecuteNonQuery();
+            command = new SQLiteCommand("delete from Color", db);
+            command.ExecuteNonQuery();
+        }
+
+
+        public void DeleteEventById(int EventId)
+        {
+            command = new SQLiteCommand($"delete from CalendarEvent where Event_id={EventId}", db);
+            command.ExecuteNonQuery();
+        }
+
+        public CalendarEvent GetEventByIndex(int EventId)
+        {
+            command = new($"SELECT Event_id, event_time,deadline,description, R,G,B from CalendarEvent c " +
+                          $"inner join Color clr on c.color_id = clr.color_id " +
+                          $"where Event_id={EventId}", db);
+            List<CalendarEvent> temp = new();
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord el in reader)
+            {
+                return new CalendarEvent()
+                {
+                    Event_id = int.Parse(el["Event_id"].ToString()),
+                    currentcolor = Color.FromArgb(int.Parse(el["R"].ToString()), int.Parse(el["G"].ToString()), 
+                        int.Parse(el["B"].ToString())),
+                    deadline = DateTime.Parse(el["deadline"].ToString()),
+                    description = el["description"].ToString(),
+                    event_time = DateTime.Parse(el["event_time"].ToString()),
+                };
+            }
+
+            return null;
+        }
+
+        public void EditEventByEventId(int EventId,CalendarEvent eEvent)
+        {
+            command = new($"Update CalendarEvent " +
+                          $"set event_time= '{eEvent.event_time.ToShortDateString()}', " +
+                          $"deadline= '{eEvent.deadline.ToShortDateString()}', " +
+                          $"description= '{eEvent.description}' " +
+                          $"where Event_id={eEvent.Event_id} ", db);
+
+
+            command.ExecuteNonQuery();
+            command = new($"select Color.color_id from CalendarEvent " +
+                          $"inner join Color on Color.color_id = CalendarEvent.color_id " +
+                          $"where Event_id = {EventId}", db);
+            int Color_id = 0;
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord el in reader)
+            {
+                Color_id = int.Parse(el["color_id"].ToString());
+            }
+
+            command = new($"Update Color " +
+                          $"set R= {eEvent.currentcolor.R}, " +
+                          $"G= {eEvent.currentcolor.G}, " +
+                          $"B= {eEvent.currentcolor.B} " +
+                          $"where color_id={Color_id}", db);
+            command.ExecuteNonQuery();
+
         }
     }
 }

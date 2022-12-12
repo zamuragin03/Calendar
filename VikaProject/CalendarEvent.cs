@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace VikaProject
 {
-    class CalendarEvent
+    public class CalendarEvent
     {
+        public int Event_id { get; set; }
         public DateTime event_time { get; set; }
         public DateTime deadline { get; set; }
         public string description { get; set; }
@@ -17,7 +18,7 @@ namespace VikaProject
 
         public override string ToString()
         {
-            return event_time + " " + deadline + " " + description + " " + currentcolor;
+            return Event_id+ ") "+ description + " "+ "до " + deadline.ToShortDateString();
         }
     }
 }
