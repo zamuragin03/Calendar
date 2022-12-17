@@ -17,10 +17,8 @@ namespace VikaProject
             Calendar myCal = CultureInfo.InvariantCulture.Calendar;
             DateTime myDT = new DateTime(yearnumber, 1, 1, myCal);
             myDT = myDT.AddMonths(monthnumber - 1);
-            int month2 = myDT.Month;
             int month = myCal.GetMonth(myDT);
             int j = Convert.ToInt32(myCal.GetDayOfWeek(myDT)) - 1;
-
             for (int m = 0; m < j; m++)
             {
                 days.Add(0);

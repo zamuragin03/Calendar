@@ -50,8 +50,9 @@ namespace VikaProject
             this.label4 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.eventpanel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -194,7 +195,7 @@ namespace VikaProject
             // 
             this.AddEvent.AutoSize = true;
             this.AddEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.AddEvent.Location = new System.Drawing.Point(130, 390);
+            this.AddEvent.Location = new System.Drawing.Point(217, 394);
             this.AddEvent.Name = "AddEvent";
             this.AddEvent.Size = new System.Drawing.Size(148, 30);
             this.AddEvent.TabIndex = 16;
@@ -259,6 +260,7 @@ namespace VikaProject
             // 
             this.panel2.BackColor = System.Drawing.Color.AliceBlue;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Controls.Add(this.button6);
             this.panel2.Controls.Add(this.button4);
             this.panel2.Controls.Add(this.button5);
             this.panel2.Controls.Add(this.button3);
@@ -281,7 +283,7 @@ namespace VikaProject
             this.button4.AutoSize = true;
             this.button4.BackColor = System.Drawing.Color.Red;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button4.Location = new System.Drawing.Point(214, 590);
+            this.button4.Location = new System.Drawing.Point(201, 567);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(164, 35);
             this.button4.TabIndex = 21;
@@ -289,11 +291,24 @@ namespace VikaProject
             this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // button5
+            // 
+            this.button5.AutoSize = true;
+            this.button5.BackColor = System.Drawing.Color.Red;
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button5.Location = new System.Drawing.Point(17, 568);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(178, 34);
+            this.button5.TabIndex = 22;
+            this.button5.Text = "Удалить событие";
+            this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // button3
             // 
             this.button3.AutoSize = true;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button3.Location = new System.Drawing.Point(15, 426);
+            this.button3.Location = new System.Drawing.Point(15, 394);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(162, 30);
             this.button3.TabIndex = 19;
@@ -301,18 +316,17 @@ namespace VikaProject
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
-            // button5
+            // button6
             // 
-            this.button5.AutoSize = true;
-            this.button5.BackColor = System.Drawing.Color.Red;
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button5.Location = new System.Drawing.Point(15, 590);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(178, 34);
-            this.button5.TabIndex = 22;
-            this.button5.Text = "Удалить событие";
-            this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button6.AutoSize = true;
+            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button6.Location = new System.Drawing.Point(15, 485);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(350, 30);
+            this.button6.TabIndex = 23;
+            this.button6.Text = "Статистика";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // Form1
             // 
@@ -366,6 +380,7 @@ namespace VikaProject
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
     }
 }
 

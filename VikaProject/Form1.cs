@@ -34,6 +34,7 @@ namespace VikaProject
         }
         private void button1_Click(object sender, EventArgs e)
         {
+            
             now = now.AddMonths(1);
             current_month.Text = now.ToString("MMMM");
             current_year.Text = now.Year.ToString();
@@ -42,6 +43,7 @@ namespace VikaProject
         }
         private void button2_Click(object sender, EventArgs e)
         {
+            
             now = now.AddMonths(-1);
             current_month.Text = now.ToString("MMMM");
             current_year.Text = now.Year.ToString();
@@ -51,6 +53,9 @@ namespace VikaProject
 
         void LoadCaledar()
         {
+            Helper.get(now.Year, now.Month);
+            days = Helper.days;
+
             panel.Controls.Clear();
 
             for (int i = 0; i < 7; i++)
@@ -87,8 +92,6 @@ namespace VikaProject
             }
             UpdateCurrentPlans();
         }
-
-
         void UpdateCurrentPlans()
         {
             dayEvents = Db.GetAllEvents();
@@ -109,6 +112,10 @@ namespace VikaProject
                                     day.currentcolor.B);
 
                             }
+                            if (DateTime.Parse(lbl.Text + "." + now.Month + "." + now.Year) == day.deadline.Date)
+                            {
+                                lbl.BackColor = Color.PaleVioletRed;
+                            }
                         }
                     }
                 }
@@ -118,6 +125,15 @@ namespace VikaProject
                 }
 
             }
+
+            for (int i = 0; i < 7; i++)
+            {
+                panel.Controls[i].BackColor=Color.Black;
+                panel.Controls[i].ForeColor = Color.White;
+
+
+            }
+
         }
 
         private void GetInfo(object sender, EventArgs e)
@@ -155,11 +171,6 @@ namespace VikaProject
             panel_event.RowCount = 1;
             panel_event.ColumnCount = 2;
 
-            //panel_event.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,80F));
-            //panel_event.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,20F));
-
-
-
 
             foreach (var el in (Db.GetAllEvents()).Where(x => x.event_time == selectedDateTime))
             {
@@ -188,6 +199,38 @@ namespace VikaProject
 
             }
 
+
+
+            foreach (var el in (Db.GetAllEvents()).Where(x => x.deadline == selectedDateTime))
+            {
+                //events_list.AppendText(el + " \n");
+
+
+                Label lbl = new Label()
+                {
+                    Text = el.Event_id + ") Дедлайн от " +el.event_time.ToShortDateString()+" " + el.description,
+                    AutoSize = true,
+                    Font = new Font("Times New Roman", 12, FontStyle.Bold),
+                    Margin = new Padding(6),
+
+                };
+                lbl.Click += SetCurrentEvent;
+
+                Panel p = new()
+                {
+                    BackColor = Color.FromArgb(el.currentcolor.R, el.currentcolor.G, el.currentcolor.B),
+                    Size = new Size(panel_event.GetColumnWidths()[0] - 10, 20),
+                    Margin = new Padding(6)
+                };
+
+                panel_event.Controls.Add(lbl, 0, -1);
+                panel_event.Controls.Add(p, -1, 0);
+
+            }
+
+
+
+
         }
 
         private void SetCurrentEvent(object sender, EventArgs e)
@@ -200,7 +243,7 @@ namespace VikaProject
                 }
             }
             Label current_event = sender as Label;
-            current_event.BackColor = Color.OrangeRed;
+            current_event.BackColor = Color.LightSkyBlue;
             string aaa = current_event.Text;
             int pos = aaa.LastIndexOf(')');
             string bbb = aaa.Substring(pos);
@@ -237,6 +280,9 @@ namespace VikaProject
             {
                 case DialogResult.Yes:
                     Db.ClearDB();
+                    LoadCaledar();
+                    UpdateCurrentPlans();
+                    UpdateEventPanel();
                     break;
                 case DialogResult.No:
                     return;
@@ -266,6 +312,14 @@ namespace VikaProject
             Db.DeleteEventById(selected_event_id);
             selected_event_id = 0;
             UpdateEventPanel();
+            UpdateCurrentPlans();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var stat =Db.GetStat(now.Month);
+            StatForm f = new(stat);
+            f.Show();
         }
     }
 }

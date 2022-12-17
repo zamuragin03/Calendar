@@ -26,10 +26,10 @@ namespace VikaProject
         public void Add(CalendarEvent calendarEvent)
         {
             command = new SQLiteCommand("insert into Color(R,G,B,color_id) values (@R,@G,@B,@color_id)", db);
+            command.Parameters.AddWithValue("@color_id", null);
             command.Parameters.AddWithValue("@R", calendarEvent.currentcolor.R);
             command.Parameters.AddWithValue("@G", calendarEvent.currentcolor.G);
             command.Parameters.AddWithValue("@B", calendarEvent.currentcolor.B);
-            command.Parameters.AddWithValue("@color_id", null);
 
             command.ExecuteNonQuery();
             int id = GetCurrentColor_id(calendarEvent);
@@ -50,14 +50,15 @@ namespace VikaProject
                                                    $"where R={calendarEvent.currentcolor.R}" +
                                                    $" and G={calendarEvent.currentcolor.G}" +
                                                    $" and B={calendarEvent.currentcolor.B}", db);
-
+            int id=0;
             reader = command.ExecuteReader();
             foreach (DbDataRecord el in reader)
             {
-                return int.Parse(el["color_id"].ToString());
+                id=int.Parse(el["color_id"].ToString());
             }
+            
 
-            return 0;
+            return id;
         }
 
         public List<CalendarEvent> GetAllEvents()
@@ -86,6 +87,9 @@ namespace VikaProject
             command = new SQLiteCommand("delete from CalendarEvent", db);
             command.ExecuteNonQuery();
             command = new SQLiteCommand("delete from Color", db);
+            command.ExecuteNonQuery();
+            command = new SQLiteCommand("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='CalendarEvent';" +
+                                        "UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='Color';", db);
             command.ExecuteNonQuery();
         }
 
@@ -116,7 +120,7 @@ namespace VikaProject
                 };
             }
 
-            return null;
+            return new CalendarEvent();
         }
 
         public void EditEventByEventId(int EventId,CalendarEvent eEvent)
@@ -125,27 +129,36 @@ namespace VikaProject
                           $"set event_time= '{eEvent.event_time.ToShortDateString()}', " +
                           $"deadline= '{eEvent.deadline.ToShortDateString()}', " +
                           $"description= '{eEvent.description}' " +
-                          $"where Event_id={eEvent.Event_id} ", db);
+                          $"where Event_id={EventId} ", db);
 
 
             command.ExecuteNonQuery();
             command = new($"select Color.color_id from CalendarEvent " +
                           $"inner join Color on Color.color_id = CalendarEvent.color_id " +
                           $"where Event_id = {EventId}", db);
-            int Color_id = 0;
-            reader = command.ExecuteReader();
-            foreach (DbDataRecord el in reader)
-            {
-                Color_id = int.Parse(el["color_id"].ToString());
-            }
 
             command = new($"Update Color " +
                           $"set R= {eEvent.currentcolor.R}, " +
                           $"G= {eEvent.currentcolor.G}, " +
                           $"B= {eEvent.currentcolor.B} " +
-                          $"where color_id={Color_id}", db);
+                          $"where color_id={EventId}", db);
             command.ExecuteNonQuery();
 
+        }
+
+        public List<(DateTime, int)> GetStat(int month)
+        {
+            command = new($"select event_time, count(event_time) from CalendarEvent " +
+                          $"where  event_time like '__.{month}.%' " +
+                          $"group by event_time", db);
+            List<(DateTime, int)> temp = new();
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord el in reader)
+            {
+                temp.Add((DateTime.Parse(el["event_time"].ToString()), int.Parse(el["count(event_time)"].ToString())));
+            }
+
+            return temp;
         }
     }
 }

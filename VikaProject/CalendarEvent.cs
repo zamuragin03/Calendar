@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VikaProject
 {
-    public class CalendarEvent
+    public struct CalendarEvent
     {
         public int Event_id { get; set; }
         public DateTime event_time { get; set; }
